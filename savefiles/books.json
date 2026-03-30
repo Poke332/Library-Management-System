@@ -1,0 +1,10 @@
+{
+  "books": [
+    {"bookId": 101, "title": "Test Title", "author": "Robert C. Martin", "totalCopies": 5, "availableCopies": 3},
+    {"bookId": 102, "title": "Design Patterns", "author": "Gamma et al.", "totalCopies": 4, "availableCopies": 3},
+    {"bookId": 103, "title": "Effective C++", "author": "Scott Meyers", "totalCopies": 3, "availableCopies": 2},
+    {"bookId": 1, "title": "Test2", "author": "Test3", "totalCopies": 4, "availableCopies": 1},
+    {"bookId": 540816, "title": "TestNew", "author": "y", "totalCopies": 10, "availableCopies": 10},
+    {"bookId": 346383, "title": "Test", "author": "T", "totalCopies": 10, "availableCopies": 10}
+  ]
+}
