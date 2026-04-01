@@ -1,5 +1,5 @@
 {
-  "books": [
+ "books": [
     {"bookId": 101, "title": "Test Title", "author": "Robert C. Martin", "totalCopies": 5, "availableCopies": 3},
     {"bookId": 102, "title": "Design Patterns", "author": "Gamma et al.", "totalCopies": 4, "availableCopies": 3},
     {"bookId": 103, "title": "Effective C++", "author": "Scott Meyers", "totalCopies": 3, "availableCopies": 2},

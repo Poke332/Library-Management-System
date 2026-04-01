@@ -1,5 +1,5 @@
 {
-  "students": [
+ "students": [
     {"studentId": 1, "name": "Alice", "borrowedBookIds": [101, 103, 1]},
     {"studentId": 2, "name": "Bob", "borrowedBookIds": [102]},
     {"studentId": 3, "name": "Charlie", "borrowedBookIds": []},

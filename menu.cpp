@@ -1,7 +1,6 @@
 #include "menu.h"
 #include "save_handler.h"
 #include "utils.h"
-
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -13,20 +12,16 @@ static void printDivider(int width = 64, char fill = '=') {
 }
 
 static void printField(const string& label, const string& value) {
-    cout << "  " << left << setw(18) << (label + ":") << value << endl;
+    cout << " " << left << setw(18) << (label + ":") << value << endl;
 }
 
 static void printField(const string& label, int value) {
-    cout << "  " << left << setw(18) << (label + ":") << value << endl;
+    cout << " " << left << setw(18) << (label + ":") << value << endl;
 }
 
 static string fitCell(const string& text, size_t width) {
-    if (text.size() <= width) {
-        return text;
-    }
-    if (width <= 3) {
-        return text.substr(0, width);
-    }
+    if (text.size() <= width) return text;
+    if (width <= 3) return text.substr(0, width);
     return text.substr(0, width - 3) + "...";
 }
 
@@ -35,15 +30,15 @@ static void printMenu() {
     printDivider();
     cout << " Library Management Menu" << endl;
     printDivider();
-    cout << "  " << left << setw(42) << "1) Add a new book"
+    cout << " " << left << setw(42) << "1) Add a new book"
          << "2) Add a new student" << endl;
-    cout << "  " << left << setw(42) << "3) Borrow a book"
+    cout << " " << left << setw(42) << "3) Borrow a book"
          << "4) Return a book" << endl;
-    cout << "  " << left << setw(42) << "5) Display all books"
+    cout << " " << left << setw(42) << "5) Display all books"
          << "6) Display all students" << endl;
-    cout << "  " << left << setw(42) << "7) Display borrowed books + borrowers"
+    cout << " " << left << setw(42) << "7) Display borrowed books + borrowers"
          << "8) Search book by ID or title" << endl;
-    cout << "  " << left << setw(42) << "9) Update book info"
+    cout << " " << left << setw(42) << "9) Update book info"
          << "10) Exit" << endl;
     printDivider();
 }
@@ -60,33 +55,26 @@ static void displayAllBooks(Library& library) {
         return;
     }
 
-    const int wId = 10;
-    const int wTitle = 24;
-    const int wAuthor = 20;
-    const int wAvail = 10;
-    const int wTotal = 10;
+    const int wId = 10, wTitle = 24, wAuthor = 20, wAvail = 10, wTotal = 10;
 
     cout << endl;
     printDivider(80, '=');
-    cout << "| " << left << setw(wId) << "Book ID"
-         << "| " << setw(wTitle) << "Title"
+    cout << "| " << left << setw(wId)    << "Book ID"
+         << "| " << setw(wTitle)  << "Title"
          << "| " << setw(wAuthor) << "Author"
-         << "| " << setw(wAvail) << "Available"
-         << "| " << setw(wTotal) << "Total"
+         << "| " << setw(wAvail)  << "Available"
+         << "| " << setw(wTotal)  << "Total"
          << "|" << endl;
     printDivider(80, '-');
 
     for (int i = 0; i < library.getBookCount(); i++) {
         Book* book = library.getBookAt(i);
-        if (book == nullptr) {
-            continue;
-        }
-
-        cout << "| " << left << setw(wId) << book->getBookId()
-             << "| " << setw(wTitle) << fitCell(book->getTitle(), wTitle)
+        if (book == nullptr) continue;
+        cout << "| " << left << setw(wId)    << book->getBookId()
+             << "| " << setw(wTitle)  << fitCell(book->getTitle(), wTitle)
              << "| " << setw(wAuthor) << fitCell(book->getAuthor(), wAuthor)
-             << "| " << setw(wAvail) << book->getAvailCopies()
-             << "| " << setw(wTotal) << book->getTotalCopies()
+             << "| " << setw(wAvail)  << book->getAvailCopies()
+             << "| " << setw(wTotal)  << book->getTotalCopies()
              << "|" << endl;
     }
     printDivider(80, '=');
@@ -98,23 +86,19 @@ static void displayAllStudents(Library& library) {
         return;
     }
 
-    const int wId = 12;
-    const int wName = 20;
-    const int wBorrowed = 44;
+    const int wId = 12, wName = 20, wBorrowed = 44;
 
     cout << endl;
     printDivider(86, '=');
-    cout << "| " << left << setw(wId) << "Student ID"
-         << "| " << setw(wName) << "Name"
+    cout << "| " << left << setw(wId)       << "Student ID"
+         << "| " << setw(wName)     << "Name"
          << "| " << setw(wBorrowed) << "Borrowed Books"
          << "|" << endl;
     printDivider(86, '-');
 
     for (int i = 0; i < library.getStudentCount(); i++) {
         Student* student = library.getStudentAt(i);
-        if (student == nullptr) {
-            continue;
-        }
+        if (student == nullptr) continue;
 
         string borrowedText;
         if (student->getBorrowCount() == 0) {
@@ -128,14 +112,12 @@ static void displayAllStudents(Library& library) {
                 } else {
                     borrowedText += "UnknownBook(" + to_string(borrowedBookId) + ")";
                 }
-                if (j < student->getBorrowCount() - 1) {
-                    borrowedText += ", ";
-                }
+                if (j < student->getBorrowCount() - 1) borrowedText += ", ";
             }
         }
 
-        cout << "| " << left << setw(wId) << student->getStudentId()
-             << "| " << setw(wName) << fitCell(student->getName(), wName)
+        cout << "| " << left << setw(wId)       << student->getStudentId()
+             << "| " << setw(wName)     << fitCell(student->getName(), wName)
              << "| " << setw(wBorrowed) << fitCell(borrowedText, wBorrowed)
              << "|" << endl;
     }
@@ -143,24 +125,22 @@ static void displayAllStudents(Library& library) {
 }
 
 static void displayBorrowedBooksWithBorrowers(Library& library) {
-    int totalBooks = library.getBookCount();
+    int totalBooks    = library.getBookCount();
     int totalStudents = library.getStudentCount();
     bool anyBorrowedBook = false;
-    const int wBook = 34;
-    const int wBorrowers = 40;
+
+    const int wBook = 34, wBorrowers = 40;
 
     cout << endl;
     printDivider(82, '=');
-    cout << "| " << left << setw(wBook) << "Book"
+    cout << "| " << left << setw(wBook)      << "Book"
          << "| " << setw(wBorrowers) << "Borrowed By"
          << "|" << endl;
     printDivider(82, '-');
 
     for (int i = 0; i < totalBooks; i++) {
         Book* book = library.getBookAt(i);
-        if (book == nullptr) {
-            continue;
-        }
+        if (book == nullptr) continue;
 
         bool bookIsBorrowed = false;
         for (int j = 0; j < totalStudents; j++) {
@@ -170,21 +150,15 @@ static void displayBorrowedBooksWithBorrowers(Library& library) {
                 break;
             }
         }
-
-        if (!bookIsBorrowed) {
-            continue;
-        }
+        if (!bookIsBorrowed) continue;
 
         anyBorrowedBook = true;
         string borrowersText;
-
         bool first = true;
         for (int j = 0; j < totalStudents; j++) {
             Student* student = library.getStudentAt(j);
             if (student != nullptr && student->hasBorrowedBook(book->getBookId())) {
-                if (!first) {
-                    borrowersText += ", ";
-                }
+                if (!first) borrowersText += ", ";
                 borrowersText += student->getName() + "(" + to_string(student->getStudentId()) + ")";
                 first = false;
             }
@@ -207,18 +181,17 @@ static void printBookDetails(Book* book) {
         cout << "Book not found." << endl;
         return;
     }
-
     printDivider(64, '-');
-    printField("Book ID", book->getBookId());
-    printField("Book Title", book->getTitle());
-    printField("Book Author", book->getAuthor());
+    printField("Book ID",          book->getBookId());
+    printField("Book Title",       book->getTitle());
+    printField("Book Author",      book->getAuthor());
     printField("Available Copies", book->getAvailCopies());
-    printField("Total Copies", book->getTotalCopies());
+    printField("Total Copies",     book->getTotalCopies());
     printDivider(64, '-');
 }
 
 static void searchBook(Library& library) {
-    cout << "Search by: 1) ID  2) Title" << endl;
+    cout << "Search by: 1) ID 2) Title" << endl;
     int mode = readInt("Choose search mode: ");
 
     if (mode == 1) {
@@ -228,19 +201,14 @@ static void searchBook(Library& library) {
     } else if (mode == 2) {
         string titlePart = readLine("Enter title keyword: ");
         bool foundAny = false;
-
         for (int i = 0; i < library.getBookCount(); i++) {
             Book* book = library.getBookAt(i);
-            if (book == nullptr) {
-                continue;
-            }
-
+            if (book == nullptr) continue;
             if (book->getTitle().find(titlePart) != string::npos) {
                 printBookDetails(book);
                 foundAny = true;
             }
         }
-
         if (!foundAny) {
             cout << "No books found with title containing \"" << titlePart << "\"." << endl;
         }
@@ -260,13 +228,13 @@ static void updateBookData(Library& library) {
     while (true) {
         cout << endl;
         printDivider();
-        cout << " Update Book: " << book->getTitle() << "(" << book->getBookId() << ")" << endl;
+        cout << " Update Book: " << book->getTitle() << " (" << book->getBookId() << ")" << endl;
         printDivider();
-        cout << "  1) Title" << endl;
-        cout << "  2) Author" << endl;
-        cout << "  3) Total Copies" << endl;
-        cout << "  4) Available Copies" << endl;
-        cout << "  5) Exit update menu" << endl;
+        cout << " 1) Title" << endl;
+        cout << " 2) Author" << endl;
+        cout << " 3) Total Copies" << endl;
+        cout << " 4) Available Copies" << endl;
+        cout << " 5) Exit update menu" << endl;
         printDivider();
 
         int updateChoice = readInt("Choose field to update: ");
@@ -276,35 +244,52 @@ static void updateBookData(Library& library) {
             book->setTitle(newTitle);
             SaveHandler::saveAll(library);
             cout << "Book title updated successfully." << endl;
+
         } else if (updateChoice == 2) {
             string newAuthor = readLine("Enter new author: ");
             book->setAuthor(newAuthor);
             SaveHandler::saveAll(library);
             cout << "Book author updated successfully." << endl;
+
         } else if (updateChoice == 3) {
             int newTotal = readPositiveInteger(
                 "Enter new total copies: ",
                 "Invalid total copies. Enter a positive integer.");
-            int oldTotal = book->getTotalCopies();
+
+            int oldTotal     = book->getTotalCopies();
             int oldAvailable = book->getAvailCopies();
-            book->setTotalCopies(newTotal);
-            if (newTotal > oldTotal) {
-                int increase = newTotal - oldTotal;
-                book->setAvailCopies(oldAvailable + increase);
+            int borrowedCount = oldTotal - oldAvailable;
+
+            // FIX BUG #4: Reducing totalCopies below borrowed count
+            // Old code only increased availCopies when newTotal > oldTotal,
+            // leaving availCopies > newTotal when reducing — an impossible state.
+            // Fix: recalculate available copies in both directions, clamping
+            // to ensure: 0 <= availCopies <= newTotal and availCopies = newTotal - borrowedCount.
+            if (newTotal < borrowedCount) {
+                cout << "Cannot reduce total copies below the number currently borrowed ("
+                     << borrowedCount << ")." << endl;
+                continue;
             }
+
+            book->setTotalCopies(newTotal);
+            book->setAvailCopies(newTotal - borrowedCount);
             SaveHandler::saveAll(library);
             cout << "Book total copies updated successfully." << endl;
+
         } else if (updateChoice == 4) {
             int newAvailable = readPositiveInteger(
                 "Enter new available copies: ",
                 "Invalid available copies. Enter a positive integer.");
+
             if (newAvailable > book->getTotalCopies()) {
-                cout << "Available copies cannot exceed total copies (" << book->getTotalCopies() << ")." << endl;
+                cout << "Available copies cannot exceed total copies ("
+                     << book->getTotalCopies() << ")." << endl;
                 continue;
             }
             book->setAvailCopies(newAvailable);
             SaveHandler::saveAll(library);
             cout << "Book available copies updated successfully." << endl;
+
         } else if (updateChoice == 5) {
             break;
         } else {
@@ -320,54 +305,69 @@ void runMenu(Library& library) {
         bool shouldExit = false;
 
         if (choice == 1) {
-            string title = readLine("Title: ");
+            string title  = readLine("Title: ");
             string author = readLine("Author: ");
-            int copies = readPositiveInteger("Total copies: ");
-            int id = generateBookId(library);
-
+            int copies    = readPositiveInteger("Total copies: ");
+            int id        = generateBookId(library);
             Book book(id, title, author, copies);
             library.addBook(book);
             SaveHandler::saveAll(library);
             cout << "Book added successfully with auto-generated ID: " << id << endl;
+
         } else if (choice == 2) {
             int id = readPositiveInteger("Student ID: ", "Invalid ID. Enter a positive integer.");
-            string name = readLine("Student name: ");
 
-            Student student(id, name);
-            library.addStudent(student);
-            SaveHandler::saveAll(library);
-            cout << "Student added successfully." << endl;
+            // FIX BUG #5: Duplicate student ID check
+            // Old code added the student unconditionally. If the same ID was entered
+            // twice, both would exist internally, causing getStudentById() to always
+            // return the first one and silently ignore the second.
+            if (library.getStudentById(id) != nullptr) {
+                cout << "A student with ID " << id << " already exists." << endl;
+            } else {
+                string name = readLine("Student name: ");
+                Student student(id, name);
+                library.addStudent(student);
+                SaveHandler::saveAll(library);
+                cout << "Student added successfully." << endl;
+            }
+
         } else if (choice == 3) {
             int studentId = readPositiveInteger("Student ID: ", "Invalid ID. Enter a positive integer.");
-            int bookId = readPositiveInteger("Book ID: ", "Invalid ID. Enter a positive integer.");
+            int bookId    = readPositiveInteger("Book ID: ",    "Invalid ID. Enter a positive integer.");
             library.borrowBook(studentId, bookId);
             SaveHandler::saveAll(library);
+
         } else if (choice == 4) {
             int studentId = readPositiveInteger("Student ID: ", "Invalid ID. Enter a positive integer.");
-            int bookId = readPositiveInteger("Book ID: ", "Invalid ID. Enter a positive integer.");
+            int bookId    = readPositiveInteger("Book ID: ",    "Invalid ID. Enter a positive integer.");
             library.returnBook(studentId, bookId);
             SaveHandler::saveAll(library);
+
         } else if (choice == 5) {
             displayAllBooks(library);
+
         } else if (choice == 6) {
             displayAllStudents(library);
+
         } else if (choice == 7) {
             displayBorrowedBooksWithBorrowers(library);
+
         } else if (choice == 8) {
             searchBook(library);
+
         } else if (choice == 9) {
             updateBookData(library);
+
         } else if (choice == 10) {
             SaveHandler::saveAll(library);
             cout << "Exiting..." << endl;
             shouldExit = true;
+
         } else {
             cout << "Invalid choice. Please pick 1-10." << endl;
         }
 
-        if (shouldExit) {
-            break;
-        }
+        if (shouldExit) break;
         waitForEnter();
     }
 }
