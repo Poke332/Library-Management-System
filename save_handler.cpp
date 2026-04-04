@@ -246,65 +246,56 @@ bool extractString(const string& obj, const string& key, string& out) {
 /// @return Dynamically allocated integer array (caller must delete[]), or nullptr if not found
 int* extractIntArray(const string& obj, const string& key, int& outCount) {
     outCount = 0;
-
+ 
     string marker = "\"" + key + "\"";
     size_t keyPos = obj.find(marker);
     if (keyPos == string::npos) return nullptr;
-
+ 
     size_t colonPos = obj.find(':', keyPos);
     if (colonPos == string::npos) return nullptr;
-
+ 
     size_t i = skipWhitespace(obj, colonPos + 1);
     if (i >= obj.size() || obj[i] != '[') return nullptr;
-
-    // --- Pass 1: count valid integers to determine allocation size ---
+ 
+    // --- Pass 1: count valid integers ---
     size_t scanPos = i + 1;
     int count = 0;
     while (scanPos < obj.size()) {
         scanPos = skipWhitespace(obj, scanPos);
-        // Stop at array end or invalid content
         if (scanPos >= obj.size() || obj[scanPos] == ']') break;
-        // Skip optional negative sign
         if (obj[scanPos] == '-') scanPos++;
-        // Require at least one digit
         if (scanPos >= obj.size() || obj[scanPos] < '0' || obj[scanPos] > '9') break;
-        // Skip all digits of this number
         while (scanPos < obj.size() && obj[scanPos] >= '0' && obj[scanPos] <= '9') scanPos++;
         count++;
         scanPos = skipWhitespace(obj, scanPos);
-        // Skip comma if present
         if (scanPos < obj.size() && obj[scanPos] == ',') scanPos++;
     }
-
+ 
     if (count == 0) return nullptr;
-
-    // --- Pass 2: allocate exact size once, then fill with actual values ---
+ 
+    // --- Pass 2: allocate once, then fill ---
     int* values = new int[count];
     int idx = 0;
-    i = i + 1; // Move past opening bracket '['
+    i = i + 1; // move past '['
     while (i < obj.size() && idx < count) {
         i = skipWhitespace(obj, i);
         if (i >= obj.size() || obj[i] == ']') break;
-
-        // Check for negative sign
+ 
         bool negative = false;
         if (obj[i] == '-') { negative = true; i++; }
-        // Require at least one digit
         if (i >= obj.size() || obj[i] < '0' || obj[i] > '9') break;
-
-        // Build integer value from digits
+ 
         int value = 0;
         while (i < obj.size() && obj[i] >= '0' && obj[i] <= '9') {
             value = value * 10 + (obj[i] - '0');
             i++;
         }
         values[idx++] = negative ? -value : value;
-
+ 
         i = skipWhitespace(obj, i);
-        // Skip comma if present
         if (i < obj.size() && obj[i] == ',') i++;
     }
-
+ 
     outCount = idx;
     return values;
 }
